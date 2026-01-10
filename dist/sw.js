@@ -15,8 +15,8 @@ self.addEventListener('push', (event) => {
     console.log('Background notification received!');
     const notification = event.data.json();
     let data = {
-        title: 'OE App - Nueva notificación',
-        body: `Has recibido una notificación de ${notification.fromUser.alias}.`
+        title: 'OE App',
+        body: `${notification.fromUser.alias} te ha mandado un ¡OE!.`
     };
     const options = {
         body: data.body,
