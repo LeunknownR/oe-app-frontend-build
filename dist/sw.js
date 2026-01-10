@@ -16,7 +16,6 @@ self.addEventListener('push', (event) => {
     const notification = event.data.json();
     let data = {
         title: 'OE App - Nueva notificación',
-        // body: "Has recibido una notificación.",
         body: `Has recibido una notificación de ${notification.fromUser.alias}.`
     };
     const options = {
@@ -34,15 +33,20 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
     console.log('Background notification clicked!');
     event.notification.close();
+    // Obtener la ruta base desde la ubicación del Service Worker
+    let basePath = self.location.pathname.split('/sw.js')[0] || '/oe-app-frontend-build';
+    // Asegurar que termine con /
+    if (!basePath.endsWith('/')) basePath += '/';
+    const appUrl = self.location.origin + basePath;
     event.waitUntil(
         clients.matchAll({ type: 'window' }).then(clientList => {
             // Si hay una ventana abierta, enfocarla
             for (const client of clientList) {
-                if (client.url === self.location.origin + '/' && 'focus' in client) return client.focus();
+                if (client.url.startsWith(appUrl) && 'focus' in client) return client.focus();
             }
             // Si no, abrir una nueva
             if (clients.openWindow)
-                return clients.openWindow('/');
+                return clients.openWindow(basePath);
         })
     );
 });
