@@ -16,7 +16,7 @@ self.addEventListener('push', (event) => {
     const notification = event.data.json();
     let data = {
         title: 'OE App',
-        body: `¡${notification.fromUser.alias} te ha mandado un OE!.`
+        body: `¡${notification.toUser.alias}! ¡${notification.fromUser.alias} te ha mandado un OE!`
     };
     const options = {
         body: data.body,
