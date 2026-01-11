@@ -45,9 +45,8 @@ self.addEventListener('notificationclick', (event) => {
                 if (client.url.startsWith(appUrl) && 'focus' in client) {
                     client.focus();
                     // Recargar la página
-                    if ('navigate' in client) {
+                    if ('navigate' in client)
                         return client.navigate(client.url);
-                    }
                     return Promise.resolve();
                 }
             }
