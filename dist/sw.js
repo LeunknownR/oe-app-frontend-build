@@ -40,9 +40,16 @@ self.addEventListener('notificationclick', (event) => {
     const appUrl = self.location.origin + basePath;
     event.waitUntil(
         clients.matchAll({ type: 'window' }).then(clientList => {
-            // Si hay una ventana abierta, enfocarla
+            // Si hay una ventana abierta, enfocarla y recargarla
             for (const client of clientList) {
-                if (client.url.startsWith(appUrl) && 'focus' in client) return client.focus();
+                if (client.url.startsWith(appUrl) && 'focus' in client) {
+                    client.focus();
+                    // Recargar la página
+                    if ('navigate' in client) {
+                        return client.navigate(client.url);
+                    }
+                    return Promise.resolve();
+                }
             }
             // Si no, abrir una nueva
             if (clients.openWindow)
